@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "url-shortner-server",
+      "script": "dist/src/app.js",
+      "watch": true,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
