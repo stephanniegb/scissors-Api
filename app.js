@@ -7,10 +7,23 @@ dotenv.config();
 import db from "./db.js";
 
 const PORT = process.env.PORT || 3000;
-const ORIGIN = process.env.CORS_ORIGIN;
+const ORIGINS = process.env.CORS_ORIGINS.split(",").map((origin) =>
+  origin.trim()
+);
 
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    allowedHeaders: "Content-Type",
+  })
+);
 app.use(bodyParser.json());
 
 import mongoose from "mongoose";
