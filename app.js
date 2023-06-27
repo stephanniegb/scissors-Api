@@ -10,12 +10,7 @@ const PORT = process.env.PORT || 3000;
 const ORIGIN = process.env.CORS_ORIGIN;
 
 const app = express();
-app.use(
-  cors({
-    origin: `${ORIGIN}`,
-    allowedHeaders: "Content-Type",
-  })
-);
+app.use(cors());
 app.use(bodyParser.json());
 
 import mongoose from "mongoose";
