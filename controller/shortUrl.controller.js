@@ -20,56 +20,44 @@ export async function createShortUrl(req, res) {
 
 export async function handleRedirect(req, res) {
   console.log("handleRedirect controller function executed");
-  const { shortId } = req.params;
+  const { shortId, custom } = req.params;
 
   try {
-    const short = await shortUrl
-      .findOneAndUpdate(
-        {
-          shortId,
-        },
-        {
-          $push: {
-            visitHistory: {
-              timestamp: Date.now(),
-            },
-          },
-        }
-      )
-      .lean();
+    let short;
 
-    if (!short) {
-      return res.sendStatus(404);
+    if (shortId) {
+      // Find by shortId
+      short = await shortUrl
+        .findOneAndUpdate(
+          {
+            shortId,
+          },
+          {
+            $push: {
+              visitHistory: {
+                timestamp: Date.now(),
+              },
+            },
+          }
+        )
+        .lean();
+    } else if (custom) {
+      // Find by custom
+      short = await shortUrl
+        .findOneAndUpdate(
+          {
+            custom,
+          },
+          {
+            $push: {
+              visitHistory: {
+                timestamp: Date.now(),
+              },
+            },
+          }
+        )
+        .lean();
     }
-
-    await analytics.create({ shortUrl: short._id });
-
-    return res.redirect(short.destination);
-  } catch (error) {
-    console.error("Failed to handle redirect:", error);
-    return res.sendStatus(500);
-  }
-}
-
-export async function handleCustomRedirect(req, res) {
-  console.log("handleCustom controller function executed");
-  const { custom } = req.params;
-
-  try {
-    const short = await shortUrl
-      .findOneAndUpdate(
-        {
-          custom,
-        },
-        {
-          $push: {
-            visitHistory: {
-              timestamp: Date.now(),
-            },
-          },
-        }
-      )
-      .lean();
 
     if (!short) {
       return res.sendStatus(404);

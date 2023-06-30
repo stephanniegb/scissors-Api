@@ -1,9 +1,4 @@
 import mongoose from "mongoose";
-// import { shortURL } from "./shortUrl.Model.js";
-
-// interface Analytics extends Document {
-//   shortUrl: shortURL;
-// }
 const schema = new mongoose.Schema(
   {
     shortUrl: {

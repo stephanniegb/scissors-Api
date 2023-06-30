@@ -4,8 +4,6 @@ import {
   createShortUrl,
   getAnalytics,
   handleRedirect,
-  createCustomUrl,
-  handleCustomRedirect,
 } from "../controller/shortUrl.controller.js";
 import validateResource from "../middleware/validateResources.js";
 import shortUrlSchema from "../schemas/createShortUrl.schema.js";
@@ -22,10 +20,9 @@ function routes(app) {
   });
   app.post("/api/url", validateResource(shortUrlSchema), createShortUrl);
 
-  app.get("/:custom", handleCustomRedirect);
-  // handleCustom redirect
-
   app.get("/:shortId", handleRedirect);
+
+  app.get("/c/:custom", handleRedirect);
 
   app.get("/api/analytics/:shortId", getAnalytics);
 }
